@@ -26,6 +26,7 @@ let number1;
 let operator;
 let number2;
 
+
 function operate(number1, operator, number2) {
     switch (operator) {
         case "+":

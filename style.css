@@ -3,3 +3,52 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    height: 400px;
+    width: 400px;
+    border: 2px solid black;
+}
+
+
+
+.operators {
+    display: flex;
+    flex-direction: column;
+}
+
+.number-container {
+    display: flex;
+    flex-direction: column;
+    /* border: 2px solid black; */
+}
+
+
+
+
+
+.display {
+    height: 100px;
+    width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 3px solid black;
+}
+
+.buttons {
+    height: 40px;
+    width: 40px;
+    padding: 8px;
+    margin: 2px;
+    flex: 1;
+}

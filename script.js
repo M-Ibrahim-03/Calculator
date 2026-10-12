@@ -24,7 +24,6 @@ let number1;
 let operator = "";
 let number2;
 
-
 function operate(number1, operator, number2) {
   switch (operator) {
     case "+":
@@ -50,10 +49,7 @@ function splitOnLastOccurrence(str, symbol) {
     return [str];
   }
 
-  return [
-    str.slice(0, lastIndex), 
-    str.slice(lastIndex + symbol.length) 
-  ];
+  return [str.slice(0, lastIndex), str.slice(lastIndex + symbol.length)];
 }
 
 const display = document.querySelector(".display");
@@ -61,22 +57,26 @@ const digits = document.querySelectorAll(".number, .operator");
 const equal = document.querySelector(".equal");
 const clear = document.querySelector(".clear");
 const operatorVar = document.querySelectorAll(".operator");
+const decimal = document.querySelector(".decimal");
 let value = "";
+let equalled = false; // boolean to check if equal has been pressed
+
 
 operatorVar.forEach((op) => {
   op.addEventListener("click", (e) => {
     console.log(value);
     console.log(operator);
+    decimal.disabled = false;
     if (operator.length >= 1) {
       console.log(e.target.textContent);
       let digitArray = splitOnLastOccurrence(value, operator);
-      console.log(digitArray)
+      console.log(digitArray);
       number1 = +digitArray[0];
       number2 = +digitArray[1];
       let result = operate(number1, operator, number2);
-      console.log(result)
+      console.log(result);
       value = result;
-      console.log(value)
+      console.log(value);
       operator = e.target.textContent;
     } else {
       operator = e.target.textContent;
@@ -84,27 +84,44 @@ operatorVar.forEach((op) => {
   });
 });
 
+decimal.addEventListener("click", (e) => {
+  decimal.disabled = true
+})
+
 digits.forEach((digit) => {
   digit.addEventListener("click", (e) => {
+    if (equalled) {
+      display.textContent = "";
+      value = "";
+      operator = "";
+      equalled = false;
+    }
     display.textContent += e.target.textContent;
     value += e.target.textContent;
-    console.log(value)
+    console.log(value);
   });
 });
-
-
 
 equal.addEventListener("click", (e) => {
   if (value.length >= 3) {
     // console.log(e.target.textContent)
     let digitArray = splitOnLastOccurrence(value, operator);
-    console.log(digitArray) 
+    console.log(digitArray);
     number1 = +digitArray[0];
     number2 = +digitArray[1];
+    if (operator === "/" && number2 == 0) {
+      alert("Cannot divide by zero!");
+      display.textContent = "";
+      value = "";
+      operator = "";
+      return;
+    }
     let result = operate(number1, operator, number2);
     display.textContent = result;
     value = result;
     operator = "";
+    equalled = true;
+    decimal.disabled = false;
   }
 });
 
@@ -112,4 +129,5 @@ clear.addEventListener("click", () => {
   display.textContent = "";
   value = "";
   operator = "";
+  decimal.disabled = false;
 });

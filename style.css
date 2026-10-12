@@ -17,6 +17,7 @@
     height: 400px;
     width: 400px;
     border: 2px solid black;
+    flex: 1;
 }
 
 
@@ -46,8 +47,8 @@
 }
 
 .buttons {
-    height: 40px;
-    width: 40px;
+    height: 80px;
+    width: 80px;
     padding: 8px;
     margin: 2px;
     flex: 1;

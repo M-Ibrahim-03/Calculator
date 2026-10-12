@@ -58,53 +58,62 @@ const equal = document.querySelector(".equal");
 const clear = document.querySelector(".clear");
 const operatorVar = document.querySelectorAll(".operator");
 const decimal = document.querySelector(".decimal");
+const backspace = document.querySelector(".backspace");
 let value = "";
 let equalled = false; // boolean to check if equal has been pressed
 
+const handleOperatorClick = (e) => {
+  console.log(value);
+  console.log(operator);
+  decimal.disabled = false;
+  if (operator.length >= 1) {
+    console.log(e.target.textContent);
+    let digitArray = splitOnLastOccurrence(value, operator);
+    console.log(digitArray);
+    number1 = +digitArray[0];
+    number2 = +digitArray[1];
+    let result = operate(number1, operator, number2);
+    value = result;
+    operator = e.target.textContent;
+  } else {
+    operator = e.target.textContent;
+  }
+};
 
-operatorVar.forEach((op) => {
-  op.addEventListener("click", (e) => {
-    console.log(value);
-    console.log(operator);
-    decimal.disabled = false;
-    if (operator.length >= 1) {
-      console.log(e.target.textContent);
-      let digitArray = splitOnLastOccurrence(value, operator);
-      console.log(digitArray);
-      number1 = +digitArray[0];
-      number2 = +digitArray[1];
-      let result = operate(number1, operator, number2);
-      console.log(result);
-      value = result;
-      console.log(value);
-      operator = e.target.textContent;
-    } else {
-      operator = e.target.textContent;
-    }
-  });
-});
+const handleBackspaceClick = () => {
+  console.log(value);
+  text = display.textContent;
+  text = text.slice(0, -1);
+  display.textContent = text;
+  value = text;
 
-decimal.addEventListener("click", (e) => {
-  decimal.disabled = true
-})
+  // let digitArray = splitOnLastOccurrence(value, operator);
+  // console.log(digitArray);
+  // number1 = +digitArray[0];
+  // number2 = +digitArray[1];
+  // let result = operate(number1, operator, number2);
+  // value = result;
+};
 
-digits.forEach((digit) => {
-  digit.addEventListener("click", (e) => {
-    if (equalled) {
-      display.textContent = "";
-      value = "";
-      operator = "";
-      equalled = false;
-    }
-    display.textContent += e.target.textContent;
-    value += e.target.textContent;
-    console.log(value);
-  });
-});
+const handleDecimalClick = () => {
+  decimal.disabled = true;
+};
 
-equal.addEventListener("click", (e) => {
+const handleDigitClick = (e) => {
+  if (equalled) {
+    display.textContent = "";
+    value = "";
+    operator = "";
+    equalled = false;
+  }
+  display.textContent += e.target.textContent;
+  value += e.target.textContent;
+  console.log(value);
+};
+
+const handleEqualClick = () => {
+  console.log(value)
   if (value.length >= 3) {
-    // console.log(e.target.textContent)
     let digitArray = splitOnLastOccurrence(value, operator);
     console.log(digitArray);
     number1 = +digitArray[0];
@@ -117,13 +126,30 @@ equal.addEventListener("click", (e) => {
       return;
     }
     let result = operate(number1, operator, number2);
+    result = String(result).split(".")[1] > 10 ? result.toFixed(2) : result;
     display.textContent = result;
     value = result;
     operator = "";
     equalled = true;
     decimal.disabled = false;
   }
+  else display.textContent = value
+};
+
+// Event Listeners
+backspace.addEventListener("click", handleBackspaceClick);
+
+operatorVar.forEach((op) => {
+  op.addEventListener("click", handleOperatorClick);
 });
+
+decimal.addEventListener("click", handleDecimalClick);
+
+digits.forEach((digit) => {
+  digit.addEventListener("click", handleDigitClick);
+});
+
+equal.addEventListener("click", handleEqualClick);
 
 clear.addEventListener("click", () => {
   display.textContent = "";
@@ -131,3 +157,79 @@ clear.addEventListener("click", () => {
   operator = "";
   decimal.disabled = false;
 });
+
+const calculatorKeys = [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  ".",
+  "+",
+  "-",
+  "*",
+  "/",
+  "=",
+  "Enter",
+  "Backspace",
+];
+
+digitArr = [];
+digits.forEach((digit) => digitArr.push(digit.textContent));
+
+operatorArr = [];
+operatorVar.forEach((op) => operatorArr.push(op.textContent));
+
+window.addEventListener("keydown", (e) => {
+  if (!calculatorKeys.includes(e.key)) return;
+
+  e.preventDefault();
+
+  if (operatorArr.includes(e.key)) {
+    operatorVar.forEach((op) => {
+      if (op.textContent == e.key) {
+        op.click();
+      }
+    });
+  } else if (digitArr.includes(e.key)) {
+    digits.forEach((digit) => {
+      if (digit.textContent == e.key) {
+        digit.click();
+      }
+    });
+  }
+
+  if (e.key == "Enter" || e.key === "=") {
+    handleEqualClick();
+  }
+
+  if (e.key == ".") handleDecimalClick();
+
+  if (e.key == "Backspace") handleBackspaceClick();
+});
+
+//  (() => {
+//       console.log("pressed")
+//       console.log(value);
+//       console.log(operator);
+//       decimal.disabled = false;
+//       if (operator.length >= 1) {
+//         console.log(e.key);
+//         let digitArray = splitOnLastOccurrence(value, operator);
+//         console.log(digitArray);
+//         number1 = +digitArray[0];
+//         number2 = +digitArray[1];
+//         let result = operate(number1, operator, number2);
+//         console.log(result);
+//         value = result;
+//         console.log(value);
+//         operator = e.key;
+//       } else {
+//         operator = e.key;
+//       }
+//     })

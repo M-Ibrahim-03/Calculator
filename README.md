@@ -4,3 +4,7 @@ In this project i will build a calculator website
 using HTML, CSS and Javascript.
 I have used all the knowledge gained throughout
 the foundations course in this calculator app.
+
+## Live Demo
+
+[Live Demo](https://m-ibrahim-03.github.io/Calculator/)
